@@ -1,0 +1,35 @@
+.root {
+    li {
+        display: inline-flex;
+
+    }
+
+    a {
+        display: inline-block;
+        color: rgba(0, 0, 0, 0.486);
+        justify-content: center;
+        text-align: center;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid rgba(255, 166, 0, 0.781);
+        border-radius: 30px;
+        margin-right: 10px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ff8800f8;
+            color: rgb(0, 0, 0);
+        }
+    }
+
+    :global {
+        .selected {
+            a {
+                background-color: #ff8800f8;
+                color: rgb(0, 0, 0);
+            }
+
+        }
+    }
+}
