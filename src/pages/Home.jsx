@@ -1,13 +1,14 @@
-import React, { useCallback } from "react";
-import axios from "axios";
+import React from "react";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
+import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 import {
   setCategoryId,
   setCurrentPage,
   setFilters,
 } from "../redux/slices/filterSlice";
+
 import Categories from "../components/Categories";
 import Sort, { sortList } from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
@@ -19,40 +20,40 @@ import { useSelector, useDispatch } from "react-redux";
 export const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isSearch = React.useRef(false);
-  const isMounted = React.useRef(false);
+  const isMounted = React.useRef(false); // 🔧 оставляем — нужен для URL
 
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter
   );
 
+  // 🔧 ИСПРАВЛЕНО: берём items И status из Redux
+  const { items, status } = useSelector((state) => state.pizza);
+
   const { searchValue } = React.useContext(SearchContext);
-  const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
   };
 
-
-  const fetchPizzas = useCallback(() => {
-    setIsLoading(true);
-
+  // 🔧 ИСПРАВЛЕНО: убрали async / await / isLoading
+  const getPizzas = () => {
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    axios
-      .get(
-        `https://692b3a6f7615a15ff24f1374.mockapi.io/items?page=${currentPage}&limit=4&${category}${search}&sortBy=${sortBy}&order=${order}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
+    dispatch(
+      fetchPizzas({
+        sortBy,
+        order,
+        category,
+        search,
+        currentPage,
       })
-  }, [categoryId, currentPage, searchValue, sort.sortProperty])
+    );
+  };
 
+  // 🔧 ИСПРАВЛЕНО: синхронизация URL
   React.useEffect(() => {
     if (isMounted.current) {
       const queryString = qs.stringify({
@@ -60,35 +61,39 @@ export const Home = () => {
         categoryId,
         currentPage,
       });
+
       navigate(`?${queryString}`);
     }
-    isMounted.current = true;
-  }, [categoryId, sort, currentPage, navigate]);
 
-  //если был первый рендер, то проверяем url параметры и созраняем в редаксе
+    isMounted.current = true;
+  }, [categoryId, sort.sortProperty, currentPage, navigate]);
+
+  // 🔧 ИСПРАВЛЕНО: читаем параметры из URL при первом рендере
   React.useEffect(() => {
     const params = qs.parse(window.location.search.substring(1));
 
-    //
-const sort = sortList.find(
-      (obj) => obj.sortProperty === params.sortProperty
-    ) || sortList[0];
-    //
+    const sortFromUrl =
+      sortList.find((obj) => obj.sortProperty === params.sortProperty) ||
+      sortList[0];
+
     dispatch(
       setFilters({
         ...params,
-        sort: sort || sortList[0],
+        sort: sortFromUrl,
       })
     );
-    isSearch.current = true;
   }, [dispatch]);
 
+  // 🔧 ИСПРАВЛЕНО: загрузка пицц
   React.useEffect(() => {
     window.scrollTo(0, 0);
-      fetchPizzas();
-  }, [categoryId, sort, searchValue, currentPage, fetchPizzas]);
+    getPizzas();
+  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+  const pizzas = items.map((obj) => (
+    <PizzaBlock key={obj.id} {...obj} />
+  ));
+
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
@@ -97,10 +102,18 @@ const sort = sortList.find(
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-        <Sort value = {sort}/>
+        <Sort value={sort} />
       </div>
+
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">{isLoading ? skeletons : pizzas}</div>
+
+      {/* 🔧 ИСПРАВЛЕНО: рендер через status из Redux */}
+      <div className="content__items">
+        {status === "loading" && skeletons}
+        {status === "success" && pizzas}
+        {status === "error" && <p className="Error">Ошибка загрузки походу пицц не будет.. 😕</p>}
+      </div>
+
       <Pagination
         currentPage={currentPage}
         onChangePage={(num) => dispatch(setCurrentPage(num))}
@@ -110,3 +123,4 @@ const sort = sortList.find(
 };
 
 export default Home;
+ 

@@ -1,7 +1,7 @@
-@import './variables.scss';
-@import './libs/normalize.scss';
+@import "./variables.scss";
+@import "./libs/normalize.scss";
 
-@import './components/all.scss';
+@import "./components/all.scss";
 
 body {
   background-color: $background;
@@ -15,7 +15,7 @@ body {
   border-radius: 10px;
   max-width: 1400px;
 
-  @media(max-width: 645px) {
+  @media (max-width: 645px) {
     margin-top: 15px;
     width: calc(100vw - 30px);
   }
@@ -23,7 +23,12 @@ body {
 
 .content {
   padding: 40px 0;
-
+  .Error {
+    width: 700px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding-bottom: 40px;
+    font-size: 40px;
+  }
   &__title {
     font-weight: 800;
     font-size: 38px;
@@ -38,16 +43,24 @@ body {
     grid-column-gap: 11px;
     grid-row-gap: 20px;
 
-    @media(max-width: 1400px) {
+    @media (max-width: 1400px) {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    @media(max-width: 1060px) {
+    @media (max-width: 1060px) {
       grid-template-columns: repeat(2, 1fr);
+      .Error {
+        width: 300px;
+        font-size: 20px;
+      }
     }
 
-    @media(max-width: 760px) {
+    @media (max-width: 760px) {
       grid-template-columns: repeat(1, 1fr);
+      .Error {
+        width: 100px;
+        font-size: 16px;
+      }
     }
   }
 
@@ -56,7 +69,7 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    @media(max-width: 1280px) {
+    @media (max-width: 1280px) {
       .categories {
         width: 100%;
         overflow: auto;
@@ -75,7 +88,7 @@ body {
       }
     }
 
-    @media(max-width: 830px) {
+    @media (max-width: 830px) {
       .categories {
         margin-top: 30px;
       }
@@ -83,7 +96,7 @@ body {
       flex-direction: column-reverse;
     }
 
-    @media(max-width: 760px) {
+    @media (max-width: 760px) {
       .categories {
         ul {
           li {
