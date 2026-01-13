@@ -1,12 +1,13 @@
 import React from "react";
 import qs from "qs";
-import { useNavigate } from "react-router-dom";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchPizzas,selectPizzaData } from "../redux/slices/pizzaSlice";
 
 import {
   setCategoryId,
   setCurrentPage,
   setFilters,
+  selectFilter,
 } from "../redux/slices/filterSlice";
 
 import Categories from "../components/Categories";
@@ -22,12 +23,10 @@ export const Home = () => {
   const dispatch = useDispatch();
   const isMounted = React.useRef(false); // 🔧 оставляем — нужен для URL
 
-  const { categoryId, sort, currentPage } = useSelector(
-    (state) => state.filter
-  );
+  const { categoryId, sort, currentPage } = useSelector(selectFilter);
 
   // 🔧 ИСПРАВЛЕНО: берём items И status из Redux
-  const { items, status } = useSelector((state) => state.pizza);
+  const { items, status } = useSelector(selectPizzaData);
 
   const { searchValue } = React.useContext(SearchContext);
 
@@ -91,7 +90,7 @@ export const Home = () => {
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => (
-    <PizzaBlock key={obj.id} {...obj} />
+    <Link key={obj.id} to={`/pizza/${obj.id}`}> <PizzaBlock {...obj} /> </Link>
   ));
 
   const skeletons = [...new Array(6)].map((_, index) => (
