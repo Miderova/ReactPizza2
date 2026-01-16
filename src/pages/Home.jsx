@@ -36,6 +36,7 @@ export const Home = () => {
 
   // 🔧 ИСПРАВЛЕНО: убрали async / await / isLoading
   const getPizzas = () => {
+    
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const category = categoryId > 0 ? `category=${categoryId}` : "";
@@ -88,6 +89,7 @@ export const Home = () => {
     window.scrollTo(0, 0);
     getPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
+
 
   const pizzas = items.map((obj) => (
     <Link key={obj.id} to={`/pizza/${obj.id}`}> <PizzaBlock {...obj} /> </Link>
