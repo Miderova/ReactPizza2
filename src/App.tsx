@@ -7,8 +7,13 @@ import Cart from "./pages/Cart"
 import NotFound from "./pages/NotFound";
 import { Routes, Route } from "react-router-dom";
 import FullPizza from "./pages/FullPizza";
-export const SearchContext = React.createContext();
 
+type SearchContextType = {
+  searchValue: string;
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export const SearchContext = React.createContext<SearchContextType | null>(null);
 
 function App() {
   const [ searchValue, setSearchValue ] = React.useState('');
