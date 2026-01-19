@@ -13,7 +13,10 @@ type SearchContextType = {
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const SearchContext = React.createContext<SearchContextType | null>(null);
+export const SearchContext = React.createContext<SearchContextType>({
+  searchValue: "",
+  setSearchValue: () => {},
+});
 
 function App() {
   const [ searchValue, setSearchValue ] = React.useState('');
