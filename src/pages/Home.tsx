@@ -2,6 +2,7 @@ import React from "react";
 import qs from "qs";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchPizzas,selectPizzaData } from "../redux/slices/pizzaSlice";
+import { useAppDispatch } from "../hooks/useAppDispatch.ts";
 
 import {
   setCategoryId,
@@ -17,6 +18,7 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../Pagination";
 import { SearchContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -30,9 +32,11 @@ export const Home = () => {
 
   const { searchValue } = React.useContext(SearchContext);
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id:any) => {
     dispatch(setCategoryId(id));
   };
+
+
 
   // 🔧 ИСПРАВЛЕНО: убрали async / await / isLoading
   const getPizzas = () => {
@@ -42,6 +46,7 @@ export const Home = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
+      const dispatch = useAppDispatch();
     dispatch(
       fetchPizzas({
         sortBy,
@@ -91,13 +96,17 @@ export const Home = () => {
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
 
-  const pizzas = items.map((obj) => (
+  const pizzas = items.map((obj:any) => (
     <Link key={obj.id} to={`/pizza/${obj.id}`}> <PizzaBlock {...obj} /> </Link>
   ));
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
+
+  type SortProps = {
+  value: any; // или конкретный тип, например SortType
+}
 
   return (
     <div className="container">
@@ -117,7 +126,7 @@ export const Home = () => {
 
       <Pagination
         currentPage={currentPage}
-        onChangePage={(num) => dispatch(setCurrentPage(num))}
+        onChangePage={(num:any) => dispatch(setCurrentPage(num))}
       />
     </div>
   );
