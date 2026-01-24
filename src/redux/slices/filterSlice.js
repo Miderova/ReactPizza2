@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Search from "../../components/Search";
 
 const initialState = {
   SearchValue: "",

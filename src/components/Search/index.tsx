@@ -16,12 +16,19 @@ const Search = () => {
     }
   };
 
-  const updateSearchValue = React.useCallback(
-    debounce((str) => {
-      setSearchValue(str);
-    }, 300),
-    []
+  const updateSearchValue = React.useMemo(
+    () =>
+      debounce((str) => {
+        setSearchValue(str);
+      }, 300),
+    [setSearchValue],
   );
+
+  React.useEffect(() => {
+    return () => {
+      updateSearchValue.cancel();
+    };
+  }, [updateSearchValue]);
 
   const onChangeInput = (event: any) => {
     const nextValue = event.target.value;

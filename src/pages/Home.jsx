@@ -40,7 +40,7 @@ export const Home = () => {
   );
 
   // 🔧 ИСПРАВЛЕНО: убрали async / await / isLoading
-  const getPizzas = () => {
+  const getPizzas = React.useCallback(() => {
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const category = categoryId > 0 ? `category=${categoryId}` : "";
@@ -55,7 +55,7 @@ export const Home = () => {
         currentPage,
       }),
     );
-  };
+  }, [categoryId, currentPage, dispatch, searchValue, sort.sortProperty]);
 
   // 🔧 ИСПРАВЛЕНО: синхронизация URL
   React.useEffect(() => {
@@ -93,7 +93,7 @@ export const Home = () => {
   React.useEffect(() => {
     window.scrollTo(0, 0);
     getPizzas();
-  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
+  }, [getPizzas]);
 
   const pizzas = React.useMemo(
     () => items.map((obj) => <PizzaBlock key={obj.id} {...obj} />),
