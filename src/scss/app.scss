@@ -72,10 +72,10 @@ body {
     @media (max-width: 1280px) {
       .categories {
         width: 100%;
-        overflow: auto;
+        overflow: visible;
 
         ul {
-          width: 785px;
+          width: auto;
         }
       }
 
@@ -104,6 +104,14 @@ body {
           }
         }
       }
+    }
+  }
+
+  @media (max-width: 760px) {
+    &__title {
+      font-size: 28px;
+      margin-top: 35px;
+      margin-bottom: 30px;
     }
   }
 }
@@ -388,6 +396,84 @@ body {
       margin: 0 auto;
       font-weight: 600;
       font-size: 18px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    &__top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    &__item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      padding-top: 20px;
+      margin-top: 20px;
+
+      &-img {
+        width: auto;
+
+        img {
+          width: 70px;
+          height: 70px;
+        }
+      }
+
+      &-info {
+        width: 100%;
+
+        h3 {
+          font-size: 18px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+
+      &-count {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 14px;
+
+        b {
+          font-size: 18px;
+        }
+      }
+
+      &-price {
+        width: 100%;
+        justify-content: flex-start;
+
+        b {
+          font-size: 18px;
+        }
+      }
+
+      &-remove {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+    &__bottom {
+      &-details {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      &-buttons {
+        flex-direction: column;
+        gap: 12px;
+
+        .go-back-btn,
+        .pay-btn {
+          width: 100%;
+        }
+      }
     }
   }
 }

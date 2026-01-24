@@ -27,15 +27,36 @@ const FullPizza: React.FC = () => {
     fetchPizza();
   }, []);
 
-  if(!pizza){
-    return <>'Загрузка...'</>;
+  if (!pizza) {
+    return <>Загрузка...</>;
   }
 
   return (
     <div className="container">
-      <img src={pizza.imageUrl} />
-      <h2>{pizza.title}</h2>
-      <h4>{pizza.price} РУБАСОВ ЭЩКЕРЕЕ</h4>
+      <div className="full-pizza">
+        <div className="full-pizza__media">
+          <img src={pizza.imageUrl} alt={pizza.title} />
+        </div>
+        <div className="full-pizza__info">
+          <h1 className="full-pizza__title">{pizza.title}</h1>
+          <div className="full-pizza__price">
+            {pizza.price} ₽
+            <span> / 30 см</span>
+          </div>
+          <p className="full-pizza__desc">
+            Насыщенный соус, много сыра и хрустящая корочка — классика, которая
+            всегда в топе.
+          </p>
+          <div className="full-pizza__actions">
+            <button
+              className="button button--outline"
+              onClick={() => navigate(-1)}
+            >
+              Назад
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

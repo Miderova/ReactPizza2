@@ -1,7 +1,8 @@
 @import '../_variables.scss';
 
 .pizza-block {
-  width: 280px;
+  width: 100%;
+  max-width: 320px;
   text-align: center;
   margin-bottom: 65px;
 
@@ -11,7 +12,8 @@
   }
 
   &__image {
-    width: 260px;
+    width: 100%;
+    max-width: 260px;
   }
 
   &__title {
@@ -67,4 +69,42 @@
     letter-spacing: 0.015em;
   }
 
+  @media (max-width: 1060px) {
+    margin-bottom: 45px;
+  }
+
+  @media (max-width: 760px) {
+    max-width: 100%;
+    margin-bottom: 35px;
+
+    &__title {
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+
+    &__selector {
+      ul {
+        li {
+          padding: 6px;
+          font-size: 13px;
+        }
+      }
+    }
+
+    &__bottom {
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    &__price {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__image {
+      max-width: 220px;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, selectCartItemById } from "../../redux/slices/cartSlice";
 const typeName = ["тонкое", "традиционное"];
@@ -27,8 +28,6 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
 
   const addedCount = cartItem ? cartItem.count : 0;
 
-  console.log(cartItem);
-
   const onClickAdd = () => {
     const item = {
       id,
@@ -44,7 +43,9 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
-        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        <Link to={`/pizza/${id}`}>
+          <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        </Link>
         <h4 className="pizza-block__title">{title}</h4>
         <div className="pizza-block__selector">
           <ul>
@@ -96,4 +97,4 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
     </div>
   );
 };
-export default PizzaBlock;
+export default React.memo(PizzaBlock);

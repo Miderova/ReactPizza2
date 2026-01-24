@@ -23,9 +23,11 @@ const Search = () => {
     []
   );
 
-  const onChangeInput = (event:any) => {
-    setValue(event.target.value);
-    updateSearchValue(event.target.value);
+  const onChangeInput = (event: any) => {
+    const nextValue = event.target.value;
+    setValue(nextValue);
+    const hasLetters = /[a-zA-Zа-яА-ЯёЁ]/.test(nextValue);
+    updateSearchValue(hasLetters ? nextValue : "");
   };
 
   return (

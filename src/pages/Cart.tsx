@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../components/CartItem";
-import { clearItems, removeItem } from "../redux/slices/cartSlice";
+import { clearItems } from "../redux/slices/cartSlice";
 import CartEmpty from "../components/CartEmpty";
 import { selectCart } from "../redux/slices/cartSlice";
 
 export const Cart = () => {
   const dispatch = useDispatch();
   const {items, totalPrice} = useSelector(selectCart);
-  const totalCount = items.reduce((sum,item) => sum + item.count,0)
+  const totalCount = items.reduce((sum:any,item:any) => sum + item.count,0)
 
 
   const onClickClear = () => {
@@ -103,8 +103,8 @@ if(!totalPrice){
         </div>
         <div className ="content__items">
           {
-            items.map(item => <CartItem key={item.id}{... item}/>)
-          }
+            items.map((item: any) => <CartItem key={item.id}{...item}/>
+          )}
         </div>
         <div className ="cart__bottom">
           <div className ="cart__bottom-details">

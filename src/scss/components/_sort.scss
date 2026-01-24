@@ -5,6 +5,7 @@
   &__label {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     svg {
       margin-right: 8px;
@@ -53,6 +54,22 @@
           color: $orange;
         }
       }
+    }
+  }
+
+  @media (max-width: 760px) {
+    &__label {
+      font-size: 14px;
+      gap: 6px;
+
+      span {
+        white-space: nowrap;
+      }
+    }
+
+    &__popup {
+      right: auto;
+      left: 0;
     }
   }
 }

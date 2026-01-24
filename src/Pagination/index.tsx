@@ -12,8 +12,16 @@ const Pagination : React.FC<PaginationProps>= ({ currentPage, onChangePage }) =>
     <ReactPaginate
       className={styles.root}
       breakLabel="..."
-      nextLabel=">"
-      previousLabel="<"
+      nextLabel={
+        <span className={styles.arrow} aria-hidden="true">
+          →
+        </span>
+      }
+      previousLabel={
+        <span className={styles.arrow} aria-hidden="true">
+          ←
+        </span>
+      }
       onPageChange={(event) => onChangePage(event.selected + 1)}
       pageRangeDisplayed={4}
       pageCount={3}

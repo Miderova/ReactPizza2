@@ -1,7 +1,7 @@
 import React from "react";
 import qs from "qs";
-import { Link, useNavigate } from "react-router-dom";
-import { fetchPizzas,selectPizzaData } from "../redux/slices/pizzaSlice";
+import { useNavigate } from "react-router-dom";
+import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 import { useAppDispatch } from "../hooks/useAppDispatch.ts";
 
 import {
@@ -17,12 +17,12 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../Pagination";
 import { SearchContext } from "../App";
-import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
+import { useSelector } from "react-redux";
 
 export const Home = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
   const isMounted = React.useRef(false); // 🔧 оставляем — нужен для URL
 
   const { categoryId, sort, currentPage } = useSelector(selectFilter);
@@ -32,21 +32,20 @@ export const Home = () => {
 
   const { searchValue } = React.useContext(SearchContext);
 
-  const onChangeCategory = (id:any) => {
-    dispatch(setCategoryId(id));
-  };
-
-
+  const onChangeCategory = React.useCallback(
+    (id) => {
+      dispatch(setCategoryId(id));
+    },
+    [dispatch],
+  );
 
   // 🔧 ИСПРАВЛЕНО: убрали async / await / isLoading
   const getPizzas = () => {
-    
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
-      const dispatch = useAppDispatch();
     dispatch(
       fetchPizzas({
         sortBy,
@@ -54,7 +53,7 @@ export const Home = () => {
         category,
         search,
         currentPage,
-      })
+      }),
     );
   };
 
@@ -85,7 +84,8 @@ export const Home = () => {
       setFilters({
         ...params,
         sort: sortFromUrl,
-      })
+        currentPage: 1,
+      }),
     );
   }, [dispatch]);
 
@@ -95,19 +95,19 @@ export const Home = () => {
     getPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
+  const pizzas = React.useMemo(
+    () => items.map((obj) => <PizzaBlock key={obj.id} {...obj} />),
+    [items],
+  );
 
-  const pizzas = items.map((obj:any) => (
-    <Link key={obj.id} to={`/pizza/${obj.id}`}> <PizzaBlock {...obj} /> </Link>
-  ));
+  const onChangePage = React.useCallback(
+    (num) => dispatch(setCurrentPage(num)),
+    [dispatch],
+  );
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
-
-  type SortProps = {
-  value: any; // или конкретный тип, например SortType
-}
-
   return (
     <div className="container">
       <div className="content__top">
@@ -121,16 +121,17 @@ export const Home = () => {
       <div className="content__items">
         {status === "loading" && skeletons}
         {status === "success" && pizzas}
-        {status === "error" && <p className="Error">Ошибка загрузки походу пицц не будет.. 😕</p>}
+        {status === "error" && (
+          <p className="Error">Ошибка загрузки походу пицц не будет.. 😕</p>
+        )}
       </div>
 
       <Pagination
         currentPage={currentPage}
-        onChangePage={(num:any) => dispatch(setCurrentPage(num))}
+        onChangePage={onChangePage}
       />
     </div>
   );
 };
 
 export default Home;
- 
